@@ -23,14 +23,8 @@ import org.gradle.api.Project
 class HttpPlugin implements Plugin<Project> {
 
     @Override void apply(final Project project) {
-        project.extensions.create('http', HttpExtension)
+        HttpExtension extension = project.extensions.create('http', HttpExtension) as HttpExtension
 
-        // TODO: download the specified library version (or the default)
+        project.dependencies.add 'runtime', "io.github.http-builder-ng:http-builder-ng-${extension.library.name().toLowerCase()}:${extension.libraryVersion}"
     }
 }
-
-/*
-FIXME: ?
-is there any way I can allow specification of client and version of library at configuration time rather than in plugin itself?
-- see how codenarc does it?
- */

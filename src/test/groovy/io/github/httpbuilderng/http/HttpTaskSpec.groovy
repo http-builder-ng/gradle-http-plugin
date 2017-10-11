@@ -15,29 +15,66 @@
  */
 package io.github.httpbuilderng.http
 
+import com.stehno.ersatz.ErsatzServer
+import com.stehno.gradle.testing.UsesGradleBuild
+import org.gradle.testkit.runner.BuildResult
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import spock.lang.AutoCleanup
 import spock.lang.Specification
 
-class HttpTaskSpec extends Specification {
+import static com.stehno.ersatz.ContentType.TEXT_PLAIN
 
+class HttpTaskSpec extends Specification implements UsesGradleBuild {
 
-}
+    @Rule TemporaryFolder projectRoot = new TemporaryFolder()
 
+    @AutoCleanup(value = 'stop') private ErsatzServer ersatz = new ErsatzServer()
 
-/*
-TODO: the goal is to be able to do something like:
-
-task notify(type:HttpTask){
-    config {
-        request.uri = 'http://somewhere.com'
-    }
-    post {
-        request.uri.path = '/notify'
-        request.body = [event: 'activated']
-        response.success {
-            log.info 'The notification was successful'
+    def 'usage'() {
+        setup:
+        ersatz.expectations {
+            get('/notify').called(1).responder {
+                content 'ok', TEXT_PLAIN
+            }
         }
-    }
-    how to limit to one call... or is that even necessary?
-}
 
- */
+        buildFile(extension: """
+            import io.github.httpbuilderng.http.HttpTask
+
+            task goGet(type:HttpTask){
+                config {
+                    request.uri = '${ersatz.httpUrl}'
+                }
+                get {
+                    request.uri.path = '/notify'
+                    response.success {
+                        // TODO: some way to see this in test
+                    }
+                }
+            }
+        """)
+
+        when:
+        BuildResult result = gradleRunner('goGet --stacktrace').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        ersatz.verify()
+    }
+
+    @Override
+    String getBuildTemplate() {
+        '''
+            plugins {
+                id 'io.github.http-builder-ng.http-plugin'
+            }
+            repositories {
+                jcenter()
+            }
+            ${config.extension ?: ''}
+        '''
+    }
+}

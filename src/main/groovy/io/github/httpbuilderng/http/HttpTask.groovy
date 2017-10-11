@@ -23,6 +23,8 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
+import static groovy.transform.TypeCheckingMode.SKIP
+
 @CompileStatic
 class HttpTask extends DefaultTask {
 
@@ -45,17 +47,22 @@ class HttpTask extends DefaultTask {
 
     // TODO: note that the response handlers are what is used to do anything with the response data
 
-
     @TaskAction void http() {
         HttpExtension extension = project.extensions.findByType(HttpExtension)
 
-        HttpBuilder builder = HttpBuilder.configure resolveConfigClosure(extension)
+        HttpBuilder builder = resolveHttpBuilder(extension)
 
         if (!methodClosure) {
             throw new IllegalArgumentException('The request method must be configured.')
         }
 
         builder.post methodClosure
+    }
+
+    @CompileStatic(SKIP)
+    private HttpBuilder resolveHttpBuilder(final HttpExtension extension) {
+        // this could be done with reflection, but I think this will be ok - performance is not really a concern here as long as it works
+        "groovyx.net.http.${extension.library.prefix}Builder".configure(resolveConfigClosure(extension))
     }
 
     private Closure resolveConfigClosure(final HttpExtension extension) {

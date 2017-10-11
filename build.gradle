@@ -29,12 +29,11 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    // TODO: figure out how to pull the version # from the Gradle distro
     groovyDoc "org.codehaus.groovy:groovy-groovydoc:2.4.7"
     groovyDoc "org.codehaus.groovy:groovy-ant:2.4.7"
 
-    // FIXME: need a way to pick client implementation (probably separate plugins)
-    compile('io.github.http-builder-ng:http-builder-ng-core:1.0.1') {
+    // We need to bootstrap the HttpBuilder library so that the plugin will compile
+    compileOnly('io.github.http-builder-ng:http-builder-ng-core:1.0.1') {
         exclude module: 'groovy-all'
     }
 
