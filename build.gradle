@@ -1,0 +1,103 @@
+plugins {
+    id 'com.github.hierynomus.license' version '0.13.1'
+    id 'com.github.kt3k.coveralls' version '2.8.1'
+    id 'com.gradle.plugin-publish' version '0.9.7'
+    id 'java-gradle-plugin'
+    id 'groovy'
+    id 'jacoco'
+    id 'maven-publish'
+    id 'com.stehno.gradle.webpreview' version '0.2.0'
+    id 'org.asciidoctor.convert' version '1.5.3'
+    id 'com.stehno.gradle.site' version '0.0.3'
+}
+
+version = '0.0.1'
+group = 'io.github.http-builder-ng'
+
+sourceCompatibility = 8
+targetCompatibility = 8
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    groovyDoc
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    // TODO: figure out how to pull the version # from the Gradle distro
+    groovyDoc "org.codehaus.groovy:groovy-groovydoc:2.4.7"
+    groovyDoc "org.codehaus.groovy:groovy-ant:2.4.7"
+
+    // FIXME: need a way to pick client implementation (probably separate plugins)
+    compile('io.github.http-builder-ng:http-builder-ng-core:1.0.1') {
+        exclude module: 'groovy-all'
+    }
+
+    testCompile 'junit:junit:4.12'
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude module: 'groovy-all'
+    }
+    testCompile('com.stehno.ersatz:ersatz:1.5.0') {
+        exclude module: 'groovy-all'
+    }
+}
+
+groovydoc {
+    groovyClasspath = configurations.groovyDoc
+}
+
+asciidoctor {
+    options doctype: 'book'
+
+    backends = ['html5']
+
+    attributes 'source-highlighter': 'coderay',
+        'coderay-linenums-mode': 'table',
+        icon: 'font',
+        linkattrs: true,
+        encoding: 'utf-8'
+}
+
+// FIXME: update this to the HttpBuilder-NG license header
+license {
+    header rootProject.file('config/license_header.txt')
+    ext.year = Calendar.instance.get(Calendar.YEAR)
+}
+
+pluginBundle {
+    website = 'https://github.com/http-builder-ng/gradle-http-plugin'
+    vcsUrl = 'https://github.com/http-builder-ng/gradle-http-plugin'
+    description = 'Gradle plugin to aid in creating HTTP calls as tasks.'
+    tags = ['gradle', 'groovy']
+
+    plugins {
+        httpPlugin {
+            id = 'io.github.http-builder-ng.http-plugin'
+            displayName = 'Gradle HTTP Plugin'
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
+task publishSite(type: GradleBuild, group: 'Publishing', description: 'Publishes the documentation web site.', dependsOn: ['site']) {
+    buildFile = 'publish.gradle'
+    tasks = ['publishGhPages']
+}
+
+site {
+    versionedFile 'src/docs/asciidoc/index.adoc'
+    assetDir '**/fonts/**'
+}
+
+tasks.site.dependsOn = ['build', 'jacocoTestReport', 'groovydoc', 'asciidoctor']
