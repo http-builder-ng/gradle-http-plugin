@@ -17,39 +17,44 @@ package com.stehno.gradle.testing
 
 import groovy.text.GStringTemplateEngine
 import groovy.text.TemplateEngine
+import groovy.transform.CompileStatic
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.junit.rules.ExternalResource
 import org.junit.rules.TemporaryFolder
 
-/**
- * Created by cjstehno on 9/23/16.
- */
-// FIXME: since now I have copied this into four different plugins its time to pull it out into its own library and share it!
-trait UsesGradleBuild {
+// FIXME: this needs to be pulled out into its own project and used in my other plugins
+@CompileStatic
+class GradleBuild extends ExternalResource {
 
-    String getBuildTemplate() { '' }
+    String template
 
-    abstract TemporaryFolder getProjectRoot()
+    @Delegate final TemporaryFolder folder = new TemporaryFolder()
 
     private final TemplateEngine templateEngine = new GStringTemplateEngine()
 
+    @Override
+    protected void before() throws Throwable {
+        folder.create()
+    }
+
     void buildFile(final Map<String, Object> config = [:]) {
-        File buildFile = projectRoot.newFile('build.gradle')
-        buildFile.text = (templateEngine.createTemplate(buildTemplate).make(config: config) as String).stripIndent()
+        File buildFile = newFile('build.gradle')
+        buildFile.text = (templateEngine.createTemplate(template).make(config: config) as String).stripIndent()
     }
 
-    GradleRunner gradleRunner(final String line) {
-        GradleRunner.create().withPluginClasspath().withDebug(true).withProjectDir(projectRoot.root).withArguments(line.split(' '))
+    GradleRunner runner(final String line) {
+        GradleRunner.create().withPluginClasspath().withDebug(true).withProjectDir(root).withArguments(line.split(' '))
     }
 
-    GradleRunner gradleRunner(final String... args) {
-        GradleRunner.create().withPluginClasspath().withDebug(true).withProjectDir(projectRoot.root).withArguments(args)
+    GradleRunner runner(final String... args) {
+        GradleRunner.create().withPluginClasspath().withDebug(true).withProjectDir(root).withArguments(args)
     }
 
-    GradleRunner gradleRunner(final List<String> args) {
-        GradleRunner.create().withPluginClasspath().withDebug(true).withProjectDir(projectRoot.root).withArguments(args)
+    GradleRunner runner(final List<String> args) {
+        GradleRunner.create().withPluginClasspath().withDebug(true).withProjectDir(root).withArguments(args)
     }
 
     static boolean totalSuccess(final BuildResult result) {
@@ -66,5 +71,10 @@ trait UsesGradleBuild {
         lines.every { String line ->
             !text.contains(trimmed ? line.trim() : line)
         }
+    }
+
+    @Override
+    protected void after() {
+        folder.delete()
     }
 }

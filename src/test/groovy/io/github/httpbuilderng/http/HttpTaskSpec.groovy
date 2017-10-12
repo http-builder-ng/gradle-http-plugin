@@ -16,18 +16,29 @@
 package io.github.httpbuilderng.http
 
 import com.stehno.ersatz.ErsatzServer
-import com.stehno.gradle.testing.UsesGradleBuild
+import com.stehno.gradle.testing.GradleBuild
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 import static com.stehno.ersatz.ContentType.TEXT_PLAIN
+import static GradleBuild.textContainsLines
+import static GradleBuild.totalSuccess
 
-class HttpTaskSpec extends Specification implements UsesGradleBuild {
+class HttpTaskSpec extends Specification {
 
-    @Rule TemporaryFolder projectRoot = new TemporaryFolder()
+    @Rule GradleBuild gradle = new GradleBuild(
+        template: '''
+            plugins {
+                id 'io.github.http-builder-ng.http-plugin'
+            }
+            repositories {
+                jcenter()
+            }
+            ${config.extension ?: ''}
+        '''
+    )
 
     @AutoCleanup(value = 'stop') private ErsatzServer ersatz = new ErsatzServer()
 
@@ -39,7 +50,7 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
             }
         }
 
-        buildFile(extension: """
+        gradle.buildFile(extension: """
             import io.github.httpbuilderng.http.HttpTask
 
             task goGet(type:HttpTask){
@@ -56,7 +67,7 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
         """)
 
         when:
-        BuildResult result = gradleRunner('goGet').build()
+        BuildResult result = gradle.runner('goGet').build()
 
         then:
         totalSuccess result
@@ -79,7 +90,7 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
             }
         }
 
-        buildFile(extension: """
+        gradle.buildFile(extension: """
             import io.github.httpbuilderng.http.HttpTask
 
             task goGet(type:HttpTask){
@@ -99,7 +110,7 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
         """)
 
         when:
-        BuildResult result = gradleRunner('goGet').build()
+        BuildResult result = gradle.runner('goGet').build()
 
         then:
         totalSuccess result
@@ -109,18 +120,5 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
 
         and:
         ersatz.verify()
-    }
-
-    @Override
-    String getBuildTemplate() {
-        '''
-            plugins {
-                id 'io.github.http-builder-ng.http-plugin'
-            }
-            repositories {
-                jcenter()
-            }
-            ${config.extension ?: ''}
-        '''
     }
 }

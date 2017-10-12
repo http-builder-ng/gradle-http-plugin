@@ -65,7 +65,6 @@ asciidoctor {
         encoding: 'utf-8'
 }
 
-// FIXME: update this to the HttpBuilder-NG license header
 license {
     header rootProject.file('config/license_header.txt')
     ext.year = Calendar.instance.get(Calendar.YEAR)
