@@ -16,14 +16,12 @@
 package io.github.httpbuilderng.http
 
 import groovy.transform.CompileStatic
-import groovyx.net.http.HttpBuilder
-import groovyx.net.http.HttpConfig
-import groovyx.net.http.HttpObjectConfig
+import groovyx.net.http.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-import static groovy.transform.TypeCheckingMode.SKIP
+import java.lang.reflect.Method
 
 @CompileStatic
 class HttpTask extends DefaultTask {
@@ -56,13 +54,21 @@ class HttpTask extends DefaultTask {
             throw new IllegalArgumentException('The request method must be configured.')
         }
 
-        builder.post methodClosure
+        // FIXME: this will need to be based on the configured method (above)
+        builder.get methodClosure
     }
 
-    @CompileStatic(SKIP)
     private HttpBuilder resolveHttpBuilder(final HttpExtension extension) {
-        // this could be done with reflection, but I think this will be ok - performance is not really a concern here as long as it works
-        "groovyx.net.http.${extension.library.prefix}Builder".configure(resolveConfigClosure(extension))
+        switch (extension.library) {
+            case HttpLibrary.CORE:
+                return JavaHttpBuilder.configure(resolveConfigClosure(extension))
+            case HttpLibrary.APACHE:
+                return ApacheHttpBuilder.configure(resolveConfigClosure(extension))
+            case HttpLibrary.OKHTTP:
+                return OkHttpBuilder.configure(resolveConfigClosure(extension))
+            default:
+                throw new IllegalArgumentException("HttpLibrary (${extension.library}) is not supported.")
+        }
     }
 
     private Closure resolveConfigClosure(final HttpExtension extension) {

@@ -29,11 +29,14 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
 
-    groovyDoc "org.codehaus.groovy:groovy-groovydoc:2.4.7"
-    groovyDoc "org.codehaus.groovy:groovy-ant:2.4.7"
+    groovyDoc "org.codehaus.groovy:groovy-groovydoc:2.4.12"
+    groovyDoc "org.codehaus.groovy:groovy-ant:2.4.12"
 
-    // We need to bootstrap the HttpBuilder library so that the plugin will compile
-    compileOnly('io.github.http-builder-ng:http-builder-ng-core:1.0.1') {
+    // TODO: ideally the plugin would download the desired client only
+    compile('io.github.http-builder-ng:http-builder-ng-apache:1.0.1') {
+        exclude module: 'groovy-all'
+    }
+    compile('io.github.http-builder-ng:http-builder-ng-okhttp:1.0.1') {
         exclude module: 'groovy-all'
     }
 

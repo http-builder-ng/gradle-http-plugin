@@ -25,14 +25,6 @@ class HttpExtension {
     private Closure configClosure
     private HttpLibrary library = HttpLibrary.CORE
 
-    // TODO: need to consider this - allowing version config could pose a problem since the plugin itself does need a version to compile
-    // - this could cause a versioning nightmare if the config interfaces change beyond what is supported by the plugin;
-    // - different versions of the plugin would have ranges of library versions that are supported
-    // - while technically the version supplied would be the defacto; however, the interface delegates-to would be incorrect and could be a source of error
-    // - it may be better to simply code the supported library version to the plugin version and allow selection of only the client library
-
-    String libraryVersion = '1.0.1' // TODO: this should default to the most current
-
     void setLibrary(HttpLibrary value) {
         this.library = value
     }
@@ -59,11 +51,7 @@ class HttpExtension {
 
 @CompileStatic @TupleConstructor
 enum HttpLibrary {
-    CORE('Java'),
-    APACHE('Apache'),
-    OKHTTP('OkHttp')
-
-    final String prefix
+    CORE, APACHE, OKHTTP
 
     static HttpLibrary fromName(final String name) {
         HttpLibrary library = values().find { it.name().equalsIgnoreCase(name) }

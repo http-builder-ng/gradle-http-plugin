@@ -48,18 +48,21 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
                 }
                 get {
                     request.uri.path = '/notify'
-                    response.success {
-                        // TODO: some way to see this in test
+                    response.success { fs, obj ->
+                        println 'I received: ' + obj 
                     }
                 }
             }
         """)
 
         when:
-        BuildResult result = gradleRunner('goGet --stacktrace').build()
+        BuildResult result = gradleRunner('goGet').build()
 
         then:
         totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I received: ok']
 
         and:
         ersatz.verify()

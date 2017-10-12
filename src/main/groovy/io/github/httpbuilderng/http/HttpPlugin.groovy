@@ -23,8 +23,6 @@ import org.gradle.api.Project
 class HttpPlugin implements Plugin<Project> {
 
     @Override void apply(final Project project) {
-        HttpExtension extension = project.extensions.create('http', HttpExtension) as HttpExtension
-
-        project.dependencies.add 'runtime', "io.github.http-builder-ng:http-builder-ng-${extension.library.name().toLowerCase()}:${extension.libraryVersion}"
+        project.extensions.create('http', HttpExtension) as HttpExtension
     }
 }
