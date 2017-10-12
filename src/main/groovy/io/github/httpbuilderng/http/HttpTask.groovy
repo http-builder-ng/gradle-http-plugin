@@ -16,20 +16,25 @@
 package io.github.httpbuilderng.http
 
 import groovy.transform.CompileStatic
+import groovy.transform.Immutable
+import groovy.transform.TypeCheckingMode
 import groovyx.net.http.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-import java.lang.reflect.Method
+import java.util.function.Consumer
 
+/**
+ * FIXME: document
+ *
+ * - note that the response handlers are what is used to do anything with the response data
+ */
 @CompileStatic
 class HttpTask extends DefaultTask {
 
     private Closure configClosure
-    private Closure methodClosure
-
-    // TODO: should I enforce a single request per task or allow multiple?
+    private final List<RequestConfig> requests = []
 
     @Input
     void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
@@ -38,24 +43,37 @@ class HttpTask extends DefaultTask {
 
     @Input
     void get(@DelegatesTo(HttpConfig) final Closure closure) {
-        methodClosure = closure
+        requests << new RequestConfig('get', closure)
     }
 
-    // FIXME: implement other methods and async versions (but only closure accepting ones - consumer?)
+    @Input
+    void getAsync(@DelegatesTo(HttpConfig) final Closure closure) {
+        requests << new RequestConfig('getAsync', closure)
+    }
 
-    // TODO: note that the response handlers are what is used to do anything with the response data
+    @Input
+    void get(final Consumer<HttpConfig> consumer) {
+        requests << new RequestConfig('get', consumer)
+    }
 
+    @Input
+    void getAsync(final Consumer<HttpConfig> consumer) {
+        requests << new RequestConfig('getAsync', consumer)
+    }
+
+    @CompileStatic(TypeCheckingMode.SKIP)
     @TaskAction void http() {
         HttpExtension extension = project.extensions.findByType(HttpExtension)
 
         HttpBuilder builder = resolveHttpBuilder(extension)
 
-        if (!methodClosure) {
-            throw new IllegalArgumentException('The request method must be configured.')
+        if (!requests) {
+            throw new IllegalArgumentException('There are no requests configured.')
         }
 
-        // FIXME: this will need to be based on the configured method (above)
-        builder.get methodClosure
+        requests.each { RequestConfig rc ->
+            builder."${rc.method}"(rc.config instanceof Closure ? rc.config as Closure : rc.config as Consumer<HttpConfig>)
+        }
     }
 
     private HttpBuilder resolveHttpBuilder(final HttpExtension extension) {
@@ -78,5 +96,12 @@ class HttpTask extends DefaultTask {
         } else {
             throw new IllegalArgumentException('A configuration closure must be provided either globally or by the task configuration.')
         }
+    }
+
+    @Immutable(knownImmutables = ['config'])
+    private static class RequestConfig {
+
+        String method
+        Object config
     }
 }

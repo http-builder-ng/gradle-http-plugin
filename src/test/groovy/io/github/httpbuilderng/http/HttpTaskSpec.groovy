@@ -31,7 +31,7 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
 
     @AutoCleanup(value = 'stop') private ErsatzServer ersatz = new ErsatzServer()
 
-    def 'usage'() {
+    def 'single GET request'() {
         setup:
         ersatz.expectations {
             get('/notify').called(1).responder {
@@ -63,6 +63,49 @@ class HttpTaskSpec extends Specification implements UsesGradleBuild {
 
         and:
         textContainsLines result.output, ['I received: ok']
+
+        and:
+        ersatz.verify()
+    }
+
+    def 'multiple GET requests'() {
+        setup:
+        ersatz.expectations {
+            get('/notify').called(1).responder {
+                content 'ok', TEXT_PLAIN
+            }
+            get('/other').called(1).responder {
+                content 'good', TEXT_PLAIN
+            }
+        }
+
+        buildFile(extension: """
+            import io.github.httpbuilderng.http.HttpTask
+
+            task goGet(type:HttpTask){
+                config {
+                    request.uri = '${ersatz.httpUrl}'
+                    response.success { fs, obj ->
+                        println 'I received: ' + obj 
+                    }
+                }
+                get {
+                    request.uri.path = '/notify'
+                }
+                get {
+                    request.uri.path = '/other'
+                }
+            }
+        """)
+
+        when:
+        BuildResult result = gradleRunner('goGet').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I received: ok', 'I received: good']
 
         and:
         ersatz.verify()
