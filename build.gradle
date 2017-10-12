@@ -46,7 +46,12 @@ dependencies {
     }
     testCompile('com.stehno.ersatz:ersatz:1.5.0') {
         exclude module: 'groovy-all'
+        exclude group: 'ch.qos.logback'
     }
+}
+
+test {
+    maxParallelForks = 4
 }
 
 groovydoc {

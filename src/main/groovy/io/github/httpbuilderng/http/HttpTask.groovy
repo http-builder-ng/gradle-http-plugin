@@ -142,7 +142,7 @@ class HttpTask extends DefaultTask {
         requests << new RequestConfig(method, conf)
     }
 
-    @TaskAction @CompileStatic(SKIP) void http() {
+    @TaskAction void http() {
         HttpExtension extension = project.extensions.findByType(HttpExtension)
         HttpBuilder builder = resolveHttpBuilder(extension)
 
@@ -151,8 +151,13 @@ class HttpTask extends DefaultTask {
         }
 
         requests.each { RequestConfig rc ->
-            builder."${rc.method}"(rc.config instanceof Closure ? rc.config as Closure : rc.config as Consumer<HttpConfig>)
+            executeRequest(builder, rc)
         }
+    }
+
+    @CompileStatic(SKIP)
+    private void executeRequest(final HttpBuilder builder, final RequestConfig rc) {
+        builder."${rc.method}"(rc.config instanceof Closure ? rc.config as Closure : rc.config as Consumer<HttpConfig>)
     }
 
     private HttpBuilder resolveHttpBuilder(final HttpExtension extension) {
