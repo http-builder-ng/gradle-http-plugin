@@ -1,9 +1,0 @@
-= Gradle HTTP Plugin User Guide
-Christopher J. Stehno <chris@stehno.com>
-v0.0.1, October 2017
-:toc: left
-:toclevels: 4
-
-== Introduction
-
-This is where the documentation lives...
