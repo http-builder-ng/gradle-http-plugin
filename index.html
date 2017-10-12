@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Gradle HTTP Plugin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gradle plugin providing task to make HTTP requests.">
+    <meta name="keywords" content="java,groovy">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/asciidoctor.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <style>
+        /* ------ START OF THEME ------ */
+        /*
+         * Mellow Contrast
+         * Prettify CSS Theme.
+         *
+         * Copyright (c) 2014 Dayle Rees
+         */
+        pre.theme-mellow-contrast {
+            background-color: #0b0a09;
+            padding: 2em;
+            font-size:.8em;
+            color: #F8F8F2;
+        }
+        pre.theme-mellow-contrast code {
+            font-family: 'Source Code Pro', Monaco, Consolas, "Lucida Console", monospace;
+        }
+        pre.theme-mellow-contrast .pln {
+            color: #F8F8F2;
+        }
+        pre.theme-mellow-contrast .str {
+            color: #F8BB39;
+        }
+        pre.theme-mellow-contrast .kwd {
+            color: #F2BC79;
+        }
+        pre.theme-mellow-contrast .com {
+            color: #7A7267;
+        }
+        pre.theme-mellow-contrast .typ {
+            color: #1F8181;
+        }
+        pre.theme-mellow-contrast .lit {
+            color: #F28972;
+        }
+        pre.theme-mellow-contrast .pun,
+        pre.theme-mellow-contrast .opn,
+        pre.theme-mellow-contrast .clo {
+            color: #F8F8F2;
+        }
+        pre.theme-mellow-contrast .tag {
+            color: #F2BC79;
+        }
+        pre.theme-mellow-contrast .atn {
+            color: #1F8181;
+        }
+        pre.theme-mellow-contrast .atv {
+            color: #F28972;
+        }
+        pre.theme-mellow-contrast .dec,
+        pre.theme-mellow-contrast .var {
+            color: #F8BB39;
+        }
+        pre.theme-mellow-contrast .fun {
+            color: #F2BC79;
+        }
+        /* ------- END OF THEME ------- */
+    </style>
+</head>
+<body onload="prettyPrint()">
+<div id="wrap">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">HTTP Plugin</a>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="https://github.com/http-builder-ng/gradle-http-plugin/issues">Issues</a></li>
+                    <li><a href="asciidoc/html5" target="_blank">User Guide</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="docs/javadoc" target="_blank">JavaDocs</a></li>
+                            <li><a href="reports/allTests" target="_blank">Test Results</a></li>
+                            <li><a href="reports/jacoco/aggregateCoverage/html" target="_blank">Test Coverage</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+    <div class="container">
+        <a href="https://github.com/http-builder-ng/gradle-http-plugin"><img style="position: absolute; top: 60px !important; right: 0; border: 0;"
+                                                                             src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+                                                                             alt="Fork me on GitHub"
+                                                                             data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+        <h1>Gradle HTTP Plugin</h1>
+
+        <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-warning-sign"></span> This project is <strong>NOT</strong> ready for production use yet - use at your own risk.</div>
+
+        <p>Do you like <a href="https://http-builder-ng.github.io/http-builder-ng/">HttpBuilder-NG</a>? Do you like <a
+            href="http://gradle.org">Gradle</a>?
+            Well then this plugin is for you! It allows the configuration and execution of HTTP requests as Gradle tasks, using HttpBuilder-NG and any
+            of its supported client implementation libraries.
+        </p>
+
+        <h2>Features</h2>
+
+        <p>The plugin encapsulates the functionality of the <a href="https://http-builder-ng.github.io/http-builder-ng/">HttpBuilder-NG</a> library and
+            has access to most of its features, summarized below:</p>
+
+        <ul>
+            <li>Support for GET, HEAD, POST, PUT, DELETE, and PATCH request methods</li>
+            <li>Multiple client implementations (core-Java, Apache, OkHttp)</li>
+            <li>HTTPS support (with ability to ignore SSL issues)</li>
+            <li>Content compression</li>
+            <li>Multipart request/response support</li>
+            <li>BASIC and DIGEST authentication support</li>
+            <li>Support for configuring client proxies</li>
+        </ul>
+
+        <h2>Installation</h2>
+
+        <p>How to get and install the plugin...</p>
+
+        <h2>Usage</h2>
+
+        <p>General usage information...</p>
+
+        <pre class="prettyprint theme-mellow-contrast"><code>task notify(type:HttpTask){
+    config {
+        request.uri = 'http://something.com'
+    }
+    post {
+        request.uri.path = '/notify'
+        request.body = [event: 'activated']
+        response.success {
+            println 'The event notification was successful'
+        }
+    }
+}</code></pre>
+
+    </div>
+    <div id="push"></div>
+</div>
+
+<div id="footer footer-dark">
+    <div class="container">
+        <p class="muted credit">Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a></p>
+    </div>
+</div>
+
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/prettify.js"></script>
+
+</body>
+</html>

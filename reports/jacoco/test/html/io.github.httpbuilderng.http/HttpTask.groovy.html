@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HttpTask.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">http-plugin</a> &gt; <a href="index.source.html" class="el_package">io.github.httpbuilderng.http</a> &gt; <span class="el_source">HttpTask.groovy</span></div><h1>HttpTask.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 HttpBuilder-NG Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.github.httpbuilderng.http
+
+import groovy.transform.CompileStatic
+import groovy.transform.Immutable
+import groovyx.net.http.*
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.TaskAction
+
+import java.util.function.Consumer
+
+import static groovy.transform.TypeCheckingMode.SKIP
+
+/**
+ * FIXME: document
+ *
+ * - note that the response handlers are what is used to do anything with the response data
+ * - OPTIONS, TRACE not implemented - not really needed in this context
+ */
+@CompileStatic @SuppressWarnings('GroovyUnusedDeclaration')
+class HttpTask extends DefaultTask {
+
+    private Closure configClosure
+<span class="fc" id="L39">    private final List&lt;RequestConfig&gt; requests = []</span>
+
+    @Input void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
+<span class="fc" id="L42">        configClosure = closure</span>
+    }
+
+    @Input void get(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="fc" id="L46">        addRequestConfig 'get', conf</span>
+    }
+
+    @Input void getAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="fc" id="L50">        addRequestConfig 'getAsync', conf</span>
+    }
+
+    @Input void get(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L54">        addRequestConfig 'get', conf</span>
+    }
+
+    @Input void getAsync(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L58">        addRequestConfig 'getAsync', conf</span>
+    }
+
+    @Input void head(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="fc" id="L62">        addRequestConfig 'head', conf</span>
+    }
+
+    @Input void headAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="fc" id="L66">        addRequestConfig 'headAsync', conf</span>
+    }
+
+    @Input void head(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L70">        addRequestConfig 'head', conf</span>
+    }
+
+    @Input void headAsync(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L74">        addRequestConfig 'headAsync', conf</span>
+    }
+
+    @Input void put(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L78">        addRequestConfig 'put', conf</span>
+    }
+
+    @Input void putAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L82">        addRequestConfig 'putAsync', conf</span>
+    }
+
+    @Input void put(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L86">        addRequestConfig 'put', conf</span>
+    }
+
+    @Input void putAsync(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L90">        addRequestConfig 'putAsync', conf</span>
+    }
+
+    @Input void post(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L94">        addRequestConfig 'post', conf</span>
+    }
+
+    @Input void postAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L98">        addRequestConfig 'postAsync', conf</span>
+    }
+
+    @Input void post(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L102">        addRequestConfig 'post', conf</span>
+    }
+
+    @Input void postAsync(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L106">        addRequestConfig 'postAsync', conf</span>
+    }
+
+    @Input void delete(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L110">        addRequestConfig 'delete', conf</span>
+    }
+
+    @Input void deleteAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L114">        addRequestConfig 'deleteAsync', conf</span>
+    }
+
+    @Input void delete(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L118">        addRequestConfig 'delete', conf</span>
+    }
+
+    @Input void deleteAsync(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L122">        addRequestConfig 'deleteAsync', conf</span>
+    }
+
+    @Input void patch(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L126">        addRequestConfig 'patch', conf</span>
+    }
+
+    @Input void patchAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+<span class="nc" id="L130">        addRequestConfig 'patchAsync', conf</span>
+    }
+
+    @Input void patch(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L134">        addRequestConfig 'patch', conf</span>
+    }
+
+    @Input void patchAsync(final Consumer&lt;HttpConfig&gt; conf) {
+<span class="nc" id="L138">        addRequestConfig 'patchAsync', conf</span>
+    }
+
+    private void addRequestConfig(final String method, final Object conf) {
+<span class="fc" id="L142">        requests &lt;&lt; new RequestConfig(method, conf)</span>
+    }
+
+    @TaskAction void http() {
+<span class="fc" id="L146">        HttpExtension extension = project.extensions.findByType(HttpExtension)</span>
+<span class="fc" id="L147">        HttpBuilder builder = resolveHttpBuilder(extension)</span>
+
+<span class="pc bpc" id="L149" title="2 of 4 branches missed.">        if (!requests) {</span>
+<span class="nc" id="L150">            throw new IllegalArgumentException('There are no requests configured.')</span>
+        }
+
+<span class="fc" id="L153">        requests.each { RequestConfig rc -&gt;</span>
+<span class="pc" id="L154">            executeRequest(builder, rc)</span>
+        }
+    }
+
+    @CompileStatic(SKIP)
+    private void executeRequest(final HttpBuilder builder, final RequestConfig rc) {
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        builder.&quot;${rc.method}&quot;(rc.config instanceof Closure ? rc.config as Closure : rc.config as Consumer&lt;HttpConfig&gt;)</span>
+    }
+
+    private HttpBuilder resolveHttpBuilder(final HttpExtension extension) {
+<span class="fc" id="L164">        switch (extension.library) {</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            case HttpLibrary.CORE:</span>
+<span class="pc" id="L166">                return JavaHttpBuilder.configure(resolveConfigClosure(extension))</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            case HttpLibrary.APACHE:</span>
+<span class="pc" id="L168">                return ApacheHttpBuilder.configure(resolveConfigClosure(extension))</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            case HttpLibrary.OKHTTP:</span>
+<span class="fc" id="L170">                return OkHttpBuilder.configure(resolveConfigClosure(extension))</span>
+            default:
+<span class="nc" id="L172">                throw new IllegalArgumentException(&quot;HttpLibrary (${extension.library}) is not supported.&quot;)</span>
+        }
+    }
+
+    private Closure resolveConfigClosure(final HttpExtension extension) {
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        Closure closure = configClosure ?: extension.configClosure</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (closure) {</span>
+<span class="pc" id="L179">            return closure</span>
+        } else {
+<span class="nc" id="L181">            throw new IllegalArgumentException('A configuration closure must be provided either globally or by the task configuration.')</span>
+        }
+    }
+
+    @Immutable(knownImmutables = ['config'])
+    private static class RequestConfig {
+
+        String method
+        Object config
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>
