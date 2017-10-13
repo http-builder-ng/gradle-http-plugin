@@ -16,50 +16,57 @@
 package io.github.httpbuilderng.http
 
 import groovy.transform.CompileStatic
-import groovy.transform.TupleConstructor
 import groovyx.net.http.HttpObjectConfig
 
+/**
+ * A Gradle Plugin DSL Extension used to configure the HTTP plugin.
+ */
 @CompileStatic
 class HttpExtension {
 
     private Closure configClosure
     private HttpLibrary library = HttpLibrary.CORE
 
-    void setLibrary(HttpLibrary value) {
-<span class="fc" id="L29">        this.library = value</span>
-    }
-
-    void setLibrary(String value) {
-<span class="fc" id="L33">        this.library = HttpLibrary.fromName(value)</span>
-    }
-
-    HttpLibrary getLibrary() {
-<span class="pc" id="L37">        library</span>
+    /**
+     * Used to specify the HTTP client library with the HttpLibrary enum. If not specified, the CORE library is used.
+     *
+     * @param value the library to be used
+     */
+    void setLibrary(final HttpLibrary value) {
+<span class="fc" id="L36">        this.library = value</span>
     }
 
     /**
-     * Provides a global/shared configuration to be used by all HTTP calls that do not provide their own &quot;config&quot; block.
+     * Used to specify the HTTP client library with a String representing the HttpLibrary enum. If not specified, the CORE library is used.
+     *
+     * @param value the library to be used
      */
-    void config(@DelegatesTo(HttpObjectConfig) Closure closure) {
-<span class="fc" id="L44">        configClosure = closure</span>
+    void setLibrary(final String value) {
+<span class="fc" id="L45">        this.library = HttpLibrary.fromName(value)</span>
+    }
+
+    /**
+     * Retrieves the configured library value as the HttpLibrary enum.
+     *
+     * @return the configured library value
+     */
+    HttpLibrary getLibrary() {
+<span class="pc" id="L54">        library</span>
+    }
+
+    /**
+     * Provides a global/shared configuration to be used by all HTTP calls that do not provide their own &quot;config&quot; block. See the
+     * &lt;a href=&quot;https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/groovyx/net/http/HttpObjectConfig.html&quot;&gt;HttpObjectConfig&lt;/a&gt; interface
+     * in the HttpBuilder-NG JavaDocs for details about the specific configuration.
+     *
+     * @param closure the configuration closure
+     */
+    void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
+<span class="fc" id="L65">        configClosure = closure</span>
     }
 
     protected Closure getConfigClosure() {
-<span class="pc" id="L48">        configClosure</span>
-    }
-}
-
-@CompileStatic @TupleConstructor
-enum HttpLibrary {
-    CORE, APACHE, OKHTTP
-
-    static HttpLibrary fromName(final String name) {
-<span class="pc" id="L57">        HttpLibrary library = values().find { it.name().equalsIgnoreCase(name) }</span>
-<span class="pc bpc" id="L58" title="2 of 4 branches missed.">        if (library) {</span>
-<span class="pc" id="L59">            return library</span>
-        } else {
-<span class="nc" id="L61">            throw new IllegalArgumentException(&quot;Specified library ($name) is unkown.&quot;)</span>
-        }
+<span class="pc" id="L69">        configClosure</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

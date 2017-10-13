@@ -104,9 +104,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="docs/javadoc" target="_blank">JavaDocs</a></li>
-                            <li><a href="reports/allTests" target="_blank">Test Results</a></li>
-                            <li><a href="reports/jacoco/aggregateCoverage/html" target="_blank">Test Coverage</a></li>
+                            <li><a href="docs/groovydoc" target="_blank">JavaDocs</a></li>
+                            <li><a href="reports/tests/test/" target="_blank">Test Results</a></li>
+                            <li><a href="reports/jacoco/test/html" target="_blank">Test Coverage</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -119,13 +119,12 @@
                                                                              alt="Fork me on GitHub"
                                                                              data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
-        <h1>Gradle HTTP Plugin</h1>
+        <h1>HTTP Plugin</h1>
 
         <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-warning-sign"></span> This project is <strong>NOT</strong> ready for production use yet - use at your own risk.</div>
 
-        <p>Do you like <a href="https://http-builder-ng.github.io/http-builder-ng/">HttpBuilder-NG</a>? Do you like <a
-            href="http://gradle.org">Gradle</a>?
-            Well then this plugin is for you! It allows the configuration and execution of HTTP requests as Gradle tasks, using HttpBuilder-NG and any
+        <p>Do you need to make HTTP requests from your build environment? Do you like <a href="https://http-builder-ng.github.io/http-builder-ng/">HttpBuilder-NG</a>? Do you like <a
+            href="http://gradle.org">Gradle</a>? Well then this plugin is for you! It allows the configuration and execution of HTTP requests as Gradle tasks, using HttpBuilder-NG and any
             of its supported client implementation libraries.
         </p>
 
@@ -146,11 +145,11 @@
 
         <h2>Installation</h2>
 
-        <p>How to get and install the plugin...</p>
+        <p>How to get and install the plugin... old way and new way (from plugins site)</p>
 
         <h2>Usage</h2>
 
-        <p>General usage information...</p>
+        <p>General usage information... apply the plugin, create a task, execute it</p>
 
         <pre class="prettyprint theme-mellow-contrast"><code>task notify(type:HttpTask){
     config {
@@ -167,12 +166,6 @@
 
     </div>
     <div id="push"></div>
-</div>
-
-<div id="footer footer-dark">
-    <div class="container">
-        <p class="muted credit">Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a></p>
-    </div>
 </div>
 
 <script src="js/jquery-1.11.1.min.js"></script>
