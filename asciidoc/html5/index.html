@@ -522,6 +522,14 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_getting_started">Getting Started</a></li>
+<li><a href="#_configuration">Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#__code_http_code_extension"><code>http</code> Extension</a></li>
+<li><a href="#__code_httptask_code"><code>HttpTask</code></a></li>
+</ul>
+</li>
+<li><a href="#_license">License</a></li>
 </ul>
 </div>
 </div>
@@ -530,7 +538,102 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This is where the documentation lives&#8230;&#8203;</p>
+<p>The Gradle HTTP Plugin provides a straight-forward means of configuring and executing HTTP requests from your Gradle build, using the
+<a href="https://http-builder-ng.github.io/http-builder-ng">HttpBuilder-NG</a> client library.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started">Getting Started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to use the HTTP Plugin to create HTTP tasks, you first need to apply it to your build. The plugin is available via the common Gradle plugins
+repository as <a href="https://plugins.gradle.org/plugin/io.github.http-builder-ng.http-plugin">io.github.http-builder-ng.http-plugin</a>. You can then apply it
+to your build with by adding the following to your <code>build.gradle</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">plugins {
+  id <span class="string"><span class="delimiter">&quot;</span><span class="content">io.github.http-builder-ng.http-plugin</span><span class="delimiter">&quot;</span></span> version <span class="string"><span class="delimiter">&quot;</span><span class="content">0.0.1</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, you will need to create a task of type <code>io.github.httpbuilderng.http.HttpTask</code> to preform your requests. The following is an example:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">task notify(<span class="key">type</span>:HttpTask){
+    config {
+        request.uri = <span class="string"><span class="delimiter">'</span><span class="content">http://something.com</span><span class="delimiter">'</span></span>
+    }
+    post {
+        request.uri.path = <span class="string"><span class="delimiter">'</span><span class="content">/notify</span><span class="delimiter">'</span></span>
+        request.body = [<span class="key">event</span>: <span class="string"><span class="delimiter">'</span><span class="content">activated</span><span class="delimiter">'</span></span>]
+        response.success {
+            println <span class="string"><span class="delimiter">'</span><span class="content">The event notification was successful</span><span class="delimiter">'</span></span>
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This <code>notify</code> task will send a POST request to <a href="http://something.com/notify" class="bare">http://something.com/notify</a> with the given payload whenever the task is executed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration">Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="__code_http_code_extension"><code>http</code> Extension</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TBD: global configuration and library specification</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__code_httptask_code"><code>HttpTask</code></h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>TBD: request methods, not about missing methods and multiple requests (async)</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license">License</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Gradle HTTP Plugin is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2</a> open source license.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Copyright 2017 HttpBuilder-NG Project</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://www.apache.org/licenses/LICENSE-2.0</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</pre>
+</div>
 </div>
 </div>
 </div>
@@ -538,7 +641,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1<br>
-Last updated 2017-10-12 14:55:37 -05:00
+Last updated 2017-10-13 13:26:35 -05:00
 </div>
 </div>
 </body>
