@@ -121,7 +121,7 @@
 
         <h1>HTTP Plugin</h1>
 
-        <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-warning-sign"></span> This project is <strong>NOT</strong> ready for production use yet - use at your own risk.</div>
+        <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-warning-sign"></span> This project is in its alpha phase. Use at your own risk!</div>
 
         <p>Do you need to make HTTP requests from your build environment? Do you like <a href="https://http-builder-ng.github.io/http-builder-ng/">HttpBuilder-NG</a>? Do you like <a
             href="http://gradle.org">Gradle</a>? Well then this plugin is for you! It allows the configuration and execution of HTTP requests as Gradle tasks, using HttpBuilder-NG and any
@@ -141,15 +141,26 @@
             <li>Multipart request/response support</li>
             <li>BASIC and DIGEST authentication support</li>
             <li>Support for configuring client proxies</li>
+            <li>Allows for multiple request executions in a single task</li>
+            <li>Provides a means of shared base configuration across multiple tasks</li>
+            <li>Full support for the HttpBuilder-NG DSL</li>
         </ul>
 
         <h2>Installation</h2>
 
-        <p>How to get and install the plugin... old way and new way (from plugins site)</p>
+        <p>The Gradle HTTP plugin is available via the Gradle Plugins Repository
+            (<a href="https://plugins.gradle.org/plugin/io.github.http-builder-ng.http-plugin">io.github.http-builder-ng.http-plugin</a>). It can
+            be applied to your <code>build.gradle</code> file with the following:</p>
+
+        <pre class="prettyprint theme-mellow-contrast"><code>plugins {
+    id "io.github.http-builder-ng.http-plugin" version "0.0.1"
+}</code></pre>
 
         <h2>Usage</h2>
 
-        <p>General usage information... apply the plugin, create a task, execute it</p>
+        <p>Once you have applied the plugin to your build, you need to create a custom task to use it. The following code would create a task
+        called "notify", which would send a POST request to http://something.com/notify with the specified body content whenever the task is
+        executed.</p>
 
         <pre class="prettyprint theme-mellow-contrast"><code>task notify(type:HttpTask){
     config {
@@ -163,6 +174,8 @@
         }
     }
 }</code></pre>
+
+        <p>The <a href="/asciidoc/html5/">User Guide</a> provides more detailed information about configuring and using the plugin.</p>
 
     </div>
     <div id="push"></div>
