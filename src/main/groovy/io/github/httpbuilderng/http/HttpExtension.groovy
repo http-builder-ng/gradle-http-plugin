@@ -16,31 +16,52 @@
 package io.github.httpbuilderng.http
 
 import groovy.transform.CompileStatic
-import groovy.transform.TupleConstructor
 import groovyx.net.http.HttpObjectConfig
 
+/**
+ * A Gradle Plugin DSL Extension used to configure the HTTP plugin.
+ */
 @CompileStatic
 class HttpExtension {
 
     private Closure configClosure
     private HttpLibrary library = HttpLibrary.CORE
 
-    void setLibrary(HttpLibrary value) {
+    /**
+     * Used to specify the HTTP client library with the HttpLibrary enum. If not specified, the CORE library is used.
+     *
+     * @param value the library to be used
+     */
+    void setLibrary(final HttpLibrary value) {
         this.library = value
     }
 
-    void setLibrary(String value) {
+    /**
+     * Used to specify the HTTP client library with a String representing the HttpLibrary enum. If not specified, the CORE library is used.
+     *
+     * @param value the library to be used
+     */
+    void setLibrary(final String value) {
         this.library = HttpLibrary.fromName(value)
     }
 
+    /**
+     * Retrieves the configured library value as the HttpLibrary enum.
+     *
+     * @return the configured library value
+     */
     HttpLibrary getLibrary() {
         library
     }
 
     /**
-     * Provides a global/shared configuration to be used by all HTTP calls that do not provide their own "config" block.
+     * Provides a global/shared configuration to be used by all HTTP calls that do not provide their own "config" block. See the
+     * <a href="https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/groovyx/net/http/HttpObjectConfig.html">HttpObjectConfig</a> interface
+     * in the HttpBuilder-NG JavaDocs for details about the specific configuration.
+     *
+     * @param closure the configuration closure
      */
-    void config(@DelegatesTo(HttpObjectConfig) Closure closure) {
+    void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
         configClosure = closure
     }
 

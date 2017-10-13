@@ -27,10 +27,12 @@ import java.util.function.Consumer
 import static groovy.transform.TypeCheckingMode.SKIP
 
 /**
- * FIXME: document
+ * Gradle Task used to allow configuration and execution of HTTP requests using the HttpBuilder-NG library.
  *
- * - note that the response handlers are what is used to do anything with the response data
- * - OPTIONS, TRACE not implemented - not really needed in this context
+ * The return values of the HTTP calls are not used in any manner. In order to process and handle responses, the
+ * <a href="https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/#_response">Response Handlers</a> should be used.
+ *
+ * All HTTP request methods supported by HttpBuilder-NG are supported, except OPTIONS and TRACE.
  */
 @CompileStatic @SuppressWarnings('GroovyUnusedDeclaration')
 class HttpTask extends DefaultTask {

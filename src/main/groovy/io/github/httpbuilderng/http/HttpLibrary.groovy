@@ -18,10 +18,33 @@ package io.github.httpbuilderng.http
 import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
 
+/**
+ * Represents the available underlying HTTP client libraries (as supported by HttpBuilder-NG).
+ */
 @CompileStatic @TupleConstructor
 enum HttpLibrary {
-    CORE, APACHE, OKHTTP
 
+    /**
+     * The "core" library, using built-in Java HTTP client.
+     */
+    CORE,
+
+    /**
+     * The "apache" library, using the Apache HttpComponents client library.
+     */
+    APACHE,
+
+    /**
+     * The "okhttp" library, using the OkHttp client library.
+     */
+    OKHTTP
+
+    /**
+     * Resolves the enum value from the name, which should be the same as the enum name, case insensitive.
+     *
+     * @param name the library name
+     * @return the enum value representing that specified library
+     */
     static HttpLibrary fromName(final String name) {
         HttpLibrary library = values().find { it.name().equalsIgnoreCase(name) }
         if (library) {

@@ -19,9 +19,17 @@ import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+/**
+ * Gradle Plugin providing ability to configure and execute HTTP requests using the HttpBuilder-NG client library.
+ */
 @CompileStatic
 class HttpPlugin implements Plugin<Project> {
 
+    /**
+     * Applies the configuration for the plugin.
+     *
+     * @param project a reference to the project
+     */
     @Override void apply(final Project project) {
         project.extensions.create('http', HttpExtension) as HttpExtension
     }
