@@ -33,10 +33,10 @@ dependencies {
     groovyDoc 'org.codehaus.groovy:groovy-ant:2.4.12'
 
     // TODO: ideally the plugin would download the desired client only
-    compile('io.github.http-builder-ng:http-builder-ng-apache:1.0.1') {
+    compile("io.github.http-builder-ng:http-builder-ng-apache:$httpBuilderVersion") {
         exclude module: 'groovy-all'
     }
-    compile('io.github.http-builder-ng:http-builder-ng-okhttp:1.0.1') {
+    compile("io.github.http-builder-ng:http-builder-ng-okhttp:$httpBuilderVersion") {
         exclude module: 'groovy-all'
     }
 
@@ -97,7 +97,7 @@ jacocoTestReport {
 
 task publishSite(type: GradleBuild, group: 'Publishing', description: 'Publishes the documentation web site.', dependsOn: ['site']) {
     buildFile = 'publish.gradle'
-    tasks = ['publishGhPages']
+    tasks = ['gitPublishPush']
 }
 
 site {

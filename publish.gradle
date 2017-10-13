@@ -3,7 +3,7 @@ plugins {
 }
 
 gitPublish {
-    repoUri = 'git@github.com:http-builder-ng/gradle-http-plugin'
+    repoUri = 'git@github.com:http-builder-ng/gradle-http-plugin.git'
     branch = 'gh-pages'
 
     contents {

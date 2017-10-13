@@ -3,7 +3,8 @@
 
 * finish testing all the request methods
 * user guide
-* site
+* wire the reports into the site
+* finish site content
 * groovy docs (or asciidocs) - do I want to convert project to java?
 
 * publish to plugin site
