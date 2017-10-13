@@ -39,6 +39,9 @@ class HttpTaskPatchSpec extends Specification {
                 jcenter()
             }
             
+            import groovyx.net.http.HttpConfig
+            import java.util.function.Consumer
+            
             ${config.globalConfig ?: ''}
             
             task makeRequest(type:io.github.httpbuilderng.http.HttpTask){
@@ -132,6 +135,58 @@ class HttpTaskPatchSpec extends Specification {
                 request.body = [id:42]
                 request.contentType = 'application/json'
             }
+        """)
+
+        when:
+        BuildResult result = gradle.runner('makeRequest').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I succeeded']
+
+        and:
+        ersatz.verify()
+    }
+
+    def 'multiple PATCH requests (consumer)'() {
+        setup:
+        ersatz.expectations {
+            patch('/multiple') {
+                called 2
+                body APPLICATION_JSON, id: 42
+                responds().code(200)
+            }
+        }
+
+        gradle.buildFile(
+            globalConfig: """
+                http {
+                    library = 'okhttp'
+                }
+            """,
+            taskConfig: """
+            config {
+                request.uri = '${ersatz.httpUrl}'
+                response.success {
+                    println 'I succeeded'
+                }
+            }
+            patchAsync(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/multiple'
+                    cfg.request.body = [id:42]
+                    cfg.request.contentType = 'application/json'
+                }
+            })
+            patch(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/multiple'
+                    cfg.request.body = [id:42]
+                    cfg.request.contentType = 'application/json'
+                }
+            })
         """)
 
         when:

@@ -17,34 +17,17 @@ package io.github.httpbuilderng.http
 
 import groovy.transform.CompileStatic
 import groovy.transform.TupleConstructor
-import groovyx.net.http.HttpObjectConfig
 
-@CompileStatic
-class HttpExtension {
+@CompileStatic @TupleConstructor
+enum HttpLibrary {
+    CORE, APACHE, OKHTTP
 
-    private Closure configClosure
-    private HttpLibrary library = HttpLibrary.CORE
-
-    void setLibrary(HttpLibrary value) {
-        this.library = value
-    }
-
-    void setLibrary(String value) {
-        this.library = HttpLibrary.fromName(value)
-    }
-
-    HttpLibrary getLibrary() {
-        library
-    }
-
-    /**
-     * Provides a global/shared configuration to be used by all HTTP calls that do not provide their own "config" block.
-     */
-    void config(@DelegatesTo(HttpObjectConfig) Closure closure) {
-        configClosure = closure
-    }
-
-    protected Closure getConfigClosure() {
-        configClosure
+    static HttpLibrary fromName(final String name) {
+        HttpLibrary library = values().find { it.name().equalsIgnoreCase(name) }
+        if (library) {
+            return library
+        } else {
+            throw new IllegalArgumentException("Specified library ($name) is unknown.")
+        }
     }
 }

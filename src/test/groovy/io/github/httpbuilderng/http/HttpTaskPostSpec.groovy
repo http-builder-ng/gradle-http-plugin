@@ -40,6 +40,9 @@ class HttpTaskPostSpec extends Specification {
                 jcenter()
             }
             
+            import groovyx.net.http.HttpConfig
+            import java.util.function.Consumer
+            
             ${config.globalConfig ?: ''}
             
             task makeRequest(type:io.github.httpbuilderng.http.HttpTask){
@@ -142,6 +145,57 @@ class HttpTaskPostSpec extends Specification {
 
         and:
         textContainsLines result.output, ['I received: ok', 'I received: good', 'I received: bueno']
+
+        and:
+        ersatz.verify()
+    }
+
+    def 'multiple POST requests (consumer)'() {
+        setup:
+        ersatz.expectations {
+            post('/multiple') {
+                called 2
+                body APPLICATION_JSON, id: 42
+                responder {
+                    content 'ok', TEXT_PLAIN
+                }
+                responder {
+                    content 'good', TEXT_PLAIN
+                }
+            }
+        }
+
+        gradle.buildFile(taskConfig: """
+            config {
+                request.uri = '${ersatz.httpUrl}'
+                response.success { fs, obj ->
+                    println 'I received: ' + obj 
+                }
+            }
+            postAsync(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/multiple'
+                    cfg.request.body = [id:42]
+                    cfg.request.contentType = 'application/json'
+                }
+            })
+            post(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/multiple'
+                    cfg.request.body = [id:42]
+                    cfg.request.contentType = 'application/json'
+                }
+            })
+        """)
+
+        when:
+        BuildResult result = gradle.runner('makeRequest').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I received: ok', 'I received: good']
 
         and:
         ersatz.verify()

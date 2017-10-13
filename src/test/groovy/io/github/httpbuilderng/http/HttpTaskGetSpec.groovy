@@ -38,6 +38,9 @@ class HttpTaskGetSpec extends Specification {
                 jcenter()
             }
             
+            import groovyx.net.http.HttpConfig
+            import java.util.function.Consumer
+            
             ${config.globalConfig ?: ''}
             
             task makeRequest(type:io.github.httpbuilderng.http.HttpTask){
@@ -121,6 +124,46 @@ class HttpTaskGetSpec extends Specification {
 
         and:
         textContainsLines result.output, ['I received: ok', 'I received: good', 'I received: bueno']
+
+        and:
+        ersatz.verify()
+    }
+
+    def 'multiple GET requests (consumer)'() {
+        setup:
+        ersatz.expectations {
+            get('/notify').called(2).responder {
+                content 'ok', TEXT_PLAIN
+            }
+        }
+
+        gradle.buildFile(taskConfig: """
+            config {
+                request.uri = '${ersatz.httpUrl}'
+                response.success { fs, obj ->
+                    println 'I received: ' + obj 
+                }
+            }
+            getAsync(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/notify'
+                }
+            })
+            get(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/notify'
+                }
+            })
+        """)
+
+        when:
+        BuildResult result = gradle.runner('makeRequest').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I received: ok']
 
         and:
         ersatz.verify()

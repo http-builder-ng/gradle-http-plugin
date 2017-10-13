@@ -38,6 +38,9 @@ class HttpTaskHeadSpec extends Specification {
                 jcenter()
             }
             
+            import groovyx.net.http.HttpConfig
+            import java.util.function.Consumer
+            
             ${config.globalConfig ?: ''}
             
             task makeRequest(type:io.github.httpbuilderng.http.HttpTask){
@@ -119,6 +122,44 @@ class HttpTaskHeadSpec extends Specification {
 
         and:
         textContainsLines result.output, ['I have arrived A!', 'I have arrived B!', 'I have arrived C!']
+
+        and:
+        ersatz.verify()
+    }
+
+    def 'multiple HEAD requests (consumer)'() {
+        setup:
+        ersatz.expectations {
+            head('/notify').called(2).responds().code(200)
+        }
+
+        gradle.buildFile(taskConfig: """
+            config {
+                request.uri = '${ersatz.httpUrl}'
+                response.success { 
+                    println 'I have arrived!' 
+                }
+            }
+            headAsync(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/notify'
+                }
+            })
+            head(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/notify'
+                }
+            })
+        """)
+
+        when:
+        BuildResult result = gradle.runner('makeRequest').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I have arrived!']
 
         and:
         ersatz.verify()

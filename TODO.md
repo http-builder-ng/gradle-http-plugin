@@ -1,7 +1,6 @@
 
 # Stuff To Do
 
-* finish testing all the request methods
 * user guide
 * wire the reports into the site
 * finish site content

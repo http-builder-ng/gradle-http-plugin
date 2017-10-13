@@ -17,11 +17,14 @@ package io.github.httpbuilderng.http
 
 import com.stehno.ersatz.ErsatzServer
 import com.stehno.gradle.testing.GradleBuild
+import groovyx.net.http.HttpConfig
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Rule
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.util.function.Consumer
 
 import static GradleBuild.textContainsLines
 import static GradleBuild.totalSuccess
@@ -36,6 +39,9 @@ class HttpTaskDeleteSpec extends Specification {
             repositories {
                 jcenter()
             }
+            
+            import groovyx.net.http.HttpConfig
+            import java.util.function.Consumer
             
             ${config.globalConfig ?: ''}
             
@@ -100,6 +106,44 @@ class HttpTaskDeleteSpec extends Specification {
             delete {
                 request.uri.path = '/notify'
             }
+        """)
+
+        when:
+        BuildResult result = gradle.runner('makeRequest').build()
+
+        then:
+        totalSuccess result
+
+        and:
+        textContainsLines result.output, ['I have arrived!']
+
+        and:
+        ersatz.verify()
+    }
+
+    def 'multiple DELETE requests (consumer)'() {
+        setup:
+        ersatz.expectations {
+            delete('/notify').called(2).responds().code(204)
+        }
+
+        gradle.buildFile(taskConfig: """
+            config {
+                request.uri = '${ersatz.httpUrl}'
+                response.when(204){ 
+                    println 'I have arrived!' 
+                }
+            }
+            deleteAsync(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/notify'
+                }
+            })
+            delete(new Consumer<HttpConfig>() {
+                @Override void accept(HttpConfig cfg) {
+                    cfg.request.uri.path = '/notify'
+                }
+            })
         """)
 
         when:

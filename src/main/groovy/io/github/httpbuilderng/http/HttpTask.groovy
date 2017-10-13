@@ -16,7 +16,7 @@
 package io.github.httpbuilderng.http
 
 import groovy.transform.CompileStatic
-import groovy.transform.Immutable
+import groovy.transform.TupleConstructor
 import groovyx.net.http.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -182,10 +182,10 @@ class HttpTask extends DefaultTask {
         }
     }
 
-    @Immutable(knownImmutables = ['config'])
+    @TupleConstructor
     private static class RequestConfig {
 
-        String method
-        Object config
+        final String method
+        final Object config
     }
 }
