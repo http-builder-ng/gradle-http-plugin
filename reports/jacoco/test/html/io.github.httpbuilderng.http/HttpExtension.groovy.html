@@ -18,13 +18,15 @@ package io.github.httpbuilderng.http
 import groovy.transform.CompileStatic
 import groovyx.net.http.HttpObjectConfig
 
+import java.util.function.Consumer
+
 /**
  * A Gradle Plugin DSL Extension used to configure the HTTP plugin.
  */
 @CompileStatic
 class HttpExtension {
 
-    private Closure configClosure
+    private Object config
     private HttpLibrary library = HttpLibrary.CORE
 
     /**
@@ -33,7 +35,7 @@ class HttpExtension {
      * @param value the library to be used
      */
     void setLibrary(final HttpLibrary value) {
-<span class="fc" id="L36">        this.library = value</span>
+<span class="fc" id="L38">        this.library = value</span>
     }
 
     /**
@@ -42,7 +44,7 @@ class HttpExtension {
      * @param value the library to be used
      */
     void setLibrary(final String value) {
-<span class="fc" id="L45">        this.library = HttpLibrary.fromName(value)</span>
+<span class="fc" id="L47">        this.library = HttpLibrary.fromName(value)</span>
     }
 
     /**
@@ -51,7 +53,7 @@ class HttpExtension {
      * @return the configured library value
      */
     HttpLibrary getLibrary() {
-<span class="pc" id="L54">        library</span>
+<span class="pc" id="L56">        library</span>
     }
 
     /**
@@ -62,11 +64,15 @@ class HttpExtension {
      * @param closure the configuration closure
      */
     void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
-<span class="fc" id="L65">        configClosure = closure</span>
+<span class="fc" id="L67">        config = closure</span>
     }
 
-    protected Closure getConfigClosure() {
-<span class="pc" id="L69">        configClosure</span>
+    void config(final Consumer&lt;HttpObjectConfig&gt; consumer){
+<span class="nc" id="L71">        config = consumer</span>
+    }
+
+    protected Object getConfig() {
+<span class="pc" id="L75">        config</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>
