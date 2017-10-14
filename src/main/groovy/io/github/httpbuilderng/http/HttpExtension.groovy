@@ -18,13 +18,15 @@ package io.github.httpbuilderng.http
 import groovy.transform.CompileStatic
 import groovyx.net.http.HttpObjectConfig
 
+import java.util.function.Consumer
+
 /**
  * A Gradle Plugin DSL Extension used to configure the HTTP plugin.
  */
 @CompileStatic
 class HttpExtension {
 
-    private Closure configClosure
+    private Object config
     private HttpLibrary library = HttpLibrary.CORE
 
     /**
@@ -62,10 +64,14 @@ class HttpExtension {
      * @param closure the configuration closure
      */
     void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
-        configClosure = closure
+        config = closure
     }
 
-    protected Closure getConfigClosure() {
-        configClosure
+    void config(final Consumer<HttpObjectConfig> consumer){
+        config = consumer
+    }
+
+    protected Object getConfig() {
+        config
     }
 }

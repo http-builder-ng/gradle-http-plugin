@@ -31,7 +31,7 @@ class HttpExtensionSpec extends Specification {
 
         expect:
         extension.library == result
-        extension.configClosure.call() == 'configuration'
+        extension.config.call() == 'configuration'
 
         where:
         library            || result

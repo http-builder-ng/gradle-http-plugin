@@ -1,6 +1,6 @@
 = Gradle HTTP Plugin User Guide
 Christopher J. Stehno <chris@stehno.com>
-v0.0.1, October 2017
+v0.1.0, October 2017
 :toc: left
 :toclevels: 4
 
@@ -19,7 +19,7 @@ to your build with by adding the following to your `build.gradle` file:
 .build.gradle
 ----
 plugins {
-  id "io.github.http-builder-ng.http-plugin" version "0.0.1"
+  id "io.github.http-builder-ng.http-plugin" version "0.1.0"
 }
 ----
 
@@ -46,22 +46,107 @@ This `notify` task will send a POST request to http://something.com/notify with 
 
 == Configuration
 
+The HTTP Plugin is a thin Gradle configuration layer on top of the https://http-builder-ng.github.io/http-builder-ng/[HttpBuilder-NG] library, which
+means that most of the configuration delegates to classes defined in that project. You will want to familiarize yourself with the
+https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/#_configuration[HttpBuilder configuration objects].
+
 === `http` Extension
 
-> TBD: global configuration and library specification
+The plugin provides an `http` extension block used to configure the global default client configuration and the client library to be used.
+
+The *`library`* property accepts either an instance of the `HttpLibrary` enum (`CORE`, `APACHE`, or `OKHTTP`) or the case-insensitive string version of
+the enum name to configure which underlying HTTP client library is used to make the requests. The `CORE` library is used by default if not explicitly
+specified.
+
+The *`config(Closure)`* and *`config(Consumer<HttpObjectConfig>)`* methods accept a `Closure` or `Consumer<HttpObjectConfig>` which will be passed into
+the `HttpBuilder::configure` method if no specific configuration is applied in the task itself (via the `config` method on the task).
+
+The documentation for the `HttpObjectConfig` configuration interface is available in either the
+https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/groovyx/net/http/HttpObjectConfig.html[JavaDocs] or
+https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/[User Guide] for the HttpBuilder-NG project.
+
+An example configuration would be similar to the following:
+
+[source,groovy]
+----
+http {
+    library = 'apache'
+    config {
+        request.uri = 'http://localhost:1234'
+    }
+}
+----
 
 === `HttpTask`
 
-> TBD: request methods, not about missing methods and multiple requests (async)
+The primary purpose of this plugin is to allow the simple creation of Gradle tasks to make HTTP requests. This is done by creating a task of type
+`io.github.httpbuilderng.http.HttpTask` and providing the desired configuration, such as:
+
+[source,groovy]
+----
+task hook(type:HttpTask){
+    config {
+        request.uri = 'http://localhost:9876'
+        request.body = [id:42]
+    }
+    post {
+        request.uri.path = '/build-hook'
+        response.success {
+            lifecycle.info 'The external build hook was executed.'
+        }
+    }
+}
+----
+
+which would submit a POST to the http://localhost:9876/build-hook URL whenever the task is executed.
+
+There are six supported HTTP request methods: `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, and `PATCH`. The `OPTIONS` and `TRACE` methods are intentionally
+omitted since they do not seem useful in this context (if you find them useful, please submit an issue to add support for them). The request method DSL
+is based directly on the https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/groovyx/net/http/HttpConfig.html[HttpConfig] interface from
+the HttpBuilder-NG library and there is a configuration block in the task DSL for each supported method type. All configuration is provided as either
+a Groovy `Closure` or a `Consumer<HttpConfig>`. Lastly, each request method has an asynchronous version denoted by the request method name suffixed by
+`Async` (e.g. `postAsync`) similar to the interface provided by `HttpBuilder`.
+
+Each task can make one or more HTTP requests. Additional requests are configured and executed sequentially (unless async). An example of the above
+configuration with multiple requests would be:
+
+[source,groovy]
+----
+task hook(type:HttpTask){
+    config {
+        request.uri = 'http://localhost:9876'
+        request.body = [id:42]
+    }
+    post {
+        request.uri.path = '/build-hook'
+        response.success {
+            lifecycle.info 'The external build hook was executed.'
+        }
+    }
+    post {
+        request.uri.path = '/notify'
+        response.success {
+            lifecyclt.info 'Notification sent.'
+        }
+    }
+}
+----
+
+The response values of the requests are not used or stored. If any interaction on response values is desired, the HttpBuilder
+https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/#_response[response handlers] must be used to perform the desired actions.
+
+TIP: See the https://docs.gradle.org/current/userguide/more_about_tasks.html[More About Tasks] section of the Gradle User Guide for more information about creating tasks.
 
 == License
 
 The Gradle HTTP Plugin is licensed under the http://www.apache.org/licenses/LICENSE-2.0[Apache 2] open source license.
 
-    Copyright 2017 HttpBuilder-NG Project
+----
+Copyright 2017 HttpBuilder-NG Project
 
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+----

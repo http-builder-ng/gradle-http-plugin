@@ -37,11 +37,31 @@ import static groovy.transform.TypeCheckingMode.SKIP
 @CompileStatic @SuppressWarnings('GroovyUnusedDeclaration')
 class HttpTask extends DefaultTask {
 
-    private Closure configClosure
+    private Object config
     private final List<RequestConfig> requests = []
 
+    /**
+     * Used to provide the client configuration for the task. This is required if the global configuration is not specified in the <code>http</code>
+     * extension configuration.
+     *
+     * The configuration itself is based on the <code>HttpObjectConfig</code> from HttpBuilder-NG.
+     *
+     * @param closure the configuration closure
+     */
     @Input void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
-        configClosure = closure
+        config = closure
+    }
+
+    /**
+     * Used to provide the client configuration for the task. This is required if the global configuration is not specified in the <code>http</code>
+     * extension configuration.
+     *
+     * The configuration itself is based on the <code>HttpObjectConfig</code> from HttpBuilder-NG.
+     *
+     * @param consumer the configuration consumer
+     */
+    @Input void config(final Consumer<HttpObjectConfig> consumer) {
+        config = consumer
     }
 
     @Input void get(@DelegatesTo(HttpConfig) final Closure conf) {
@@ -162,25 +182,26 @@ class HttpTask extends DefaultTask {
         builder."${rc.method}"(rc.config instanceof Closure ? rc.config as Closure : rc.config as Consumer<HttpConfig>)
     }
 
+    @CompileStatic(SKIP)
     private HttpBuilder resolveHttpBuilder(final HttpExtension extension) {
         switch (extension.library) {
             case HttpLibrary.CORE:
-                return JavaHttpBuilder.configure(resolveConfigClosure(extension))
+                return JavaHttpBuilder.configure(resolveConfig(extension))
             case HttpLibrary.APACHE:
-                return ApacheHttpBuilder.configure(resolveConfigClosure(extension))
+                return ApacheHttpBuilder.configure(resolveConfig(extension))
             case HttpLibrary.OKHTTP:
-                return OkHttpBuilder.configure(resolveConfigClosure(extension))
+                return OkHttpBuilder.configure(resolveConfig(extension))
             default:
                 throw new IllegalArgumentException("HttpLibrary (${extension.library}) is not supported.")
         }
     }
 
-    private Closure resolveConfigClosure(final HttpExtension extension) {
-        Closure closure = configClosure ?: extension.configClosure
-        if (closure) {
-            return closure
+    private Object resolveConfig(final HttpExtension extension) {
+        Object configObject = config ?: extension.config
+        if (configObject) {
+            return configObject
         } else {
-            throw new IllegalArgumentException('A configuration closure must be provided either globally or by the task configuration.')
+            throw new IllegalArgumentException('A configuration closure or consumer must be provided either globally or by the task configuration.')
         }
     }
 
