@@ -74,6 +74,15 @@ license {
     ext.year = Calendar.instance.get(Calendar.YEAR)
 }
 
+gradlePlugin {
+    plugins {
+        httpPlugin {
+            id = 'io.github.http-builder-ng.http-plugin'
+            implementationClass = 'io.github.httpbuilderng.http.HttpPlugin'
+        }
+    }
+}
+
 pluginBundle {
     website = 'https://github.com/http-builder-ng/gradle-http-plugin'
     vcsUrl = 'https://github.com/http-builder-ng/gradle-http-plugin'
