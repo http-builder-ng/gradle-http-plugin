@@ -1,5 +1,7 @@
 # Gradle HTTP Plugin
 
+[![Build Status](https://travis-ci.org/http-builder-ng/gradle-http-plugin.svg?branch=master)](https://travis-ci.org/http-builder-ng/gradle-http-plugin) [![Coverage Status](https://coveralls.io/repos/github/http-builder-ng/gradle-http-plugin/badge.svg?branch=master)](https://coveralls.io/github/http-builder-ng/gradle-http-plugin?branch=master)
+
 ## Quick Links
 
 * Site: https://http-builder-ng.github.io/gradle-http-plugin/
