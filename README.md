@@ -37,7 +37,7 @@ applied to your Gradle build with one of the following:
 
 ```groovy
 plugins {
-  id "io.github.http-builder-ng.http-plugin" version "0.1.0"
+  id "io.github.http-builder-ng.http-plugin" version "0.1.1"
 }
 ``` 
 
@@ -51,7 +51,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.io.github.http-builder-ng:http-plugin:0.1.0"
+    classpath "gradle.plugin.io.github.http-builder-ng:http-plugin:0.1.1"
   }
 }
 

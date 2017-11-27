@@ -1,6 +1,6 @@
 = Gradle HTTP Plugin User Guide
 Christopher J. Stehno <chris@stehno.com>
-v0.1.0, October 2017
+v0.1.1, October 2017
 :toc: left
 :toclevels: 4
 
@@ -19,7 +19,7 @@ to your build with by adding the following to your `build.gradle` file:
 .build.gradle
 ----
 plugins {
-  id "io.github.http-builder-ng.http-plugin" version "0.1.0"
+  id "io.github.http-builder-ng.http-plugin" version "0.1.1"
 }
 ----
 

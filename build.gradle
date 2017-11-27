@@ -11,7 +11,7 @@ plugins {
     id 'com.stehno.gradle.site' version '0.0.3'
 }
 
-version = '0.1.0'
+version = '0.1.1'
 group = 'io.github.http-builder-ng'
 
 sourceCompatibility = 8
@@ -50,7 +50,7 @@ dependencies {
 }
 
 test {
-    maxParallelForks = 4
+    maxParallelForks = Math.min(Runtime.runtime.availableProcessors(), 8)
 }
 
 groovydoc {
