@@ -32,7 +32,7 @@ task notify(type:HttpTask){
 
 ## Installing
 
-The plugin is available through the []Gradle Plugin Repository](https://plugins.gradle.org/plugin/io.github.http-builder-ng.http-plugin) and may be 
+The plugin is available through the [Gradle Plugin Repository](https://plugins.gradle.org/plugin/io.github.http-builder-ng.http-plugin) and may be 
 applied to your Gradle build with one of the following:
 
 ```groovy
@@ -66,7 +66,7 @@ The project is build with Gradle using the following command:
 
 ## License
 
-The Gradle HTTP Plugin is licensed under the http://www.apache.org/licenses/LICENSE-2.0[Apache 2] open source license.
+The Gradle HTTP Plugin is licensed under the [Apache 2](http://www.apache.org/licenses/LICENSE-2.0) open source license.
 
     Copyright 2017 HttpBuilder-NG Project
 
