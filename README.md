@@ -15,6 +15,7 @@
 A Gradle plugin providing the ability to define tasks to make HTTP requests using the HttpBuilder-NG client library. The resulting tasks have a clean
 DSL and will look something like the following:
 
+Groovy
 ```groovy
 task notify(type:HttpTask){
     config {
@@ -30,16 +31,33 @@ task notify(type:HttpTask){
 }
 ```
 
+Kotlin
+```kotlin
+tasks {
+    val notify by registering(HttpTask::class) {
+        config {
+            it.request.setUri = "http://something.com"
+        }
+        post {
+            it.request.uri.setPath("/notify")
+        }
+        response.success { fromServer, body ->
+            println("The event notification was successful")
+        }
+    }
+}
+```
+
 ## Installing
 
-The plugin is available through the [Gradle Plugin Repository](https://plugins.gradle.org/plugin/io.github.http-builder-ng.http-plugin) and may be 
+The plugin is available through the [Gradle Plugin Repository](https://plugins.gradle.org/plugin/io.github.http-builder-ng.http-plugin) and may be
 applied to your Gradle build with one of the following:
 
 ```groovy
 plugins {
   id "io.github.http-builder-ng.http-plugin" version "0.1.1"
 }
-``` 
+```
 
 or
 
@@ -70,13 +88,13 @@ The Gradle HTTP Plugin is licensed under the [Apache 2](http://www.apache.org/li
 
     Copyright 2017 HttpBuilder-NG Project
 
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except 
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
     in compliance with the License. You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software distributed under the License 
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express 
-    or implied. See the License for the specific language governing permissions and limitations under 
+    Unless required by applicable law or agreed to in writing, software distributed under the License
+    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing permissions and limitations under
     the License.
 
