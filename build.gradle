@@ -26,24 +26,24 @@ configurations {
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
 
     groovyDoc 'org.codehaus.groovy:groovy-groovydoc:2.4.12'
     groovyDoc 'org.codehaus.groovy:groovy-ant:2.4.12'
 
     // TODO: ideally the plugin would download the desired client only
-    compile("io.github.http-builder-ng:http-builder-ng-apache:$httpBuilderVersion") {
+    implementation("io.github.http-builder-ng:http-builder-ng-apache:$httpBuilderVersion") {
         exclude module: 'groovy-all'
     }
-    compile("io.github.http-builder-ng:http-builder-ng-okhttp:$httpBuilderVersion") {
+    implementation("io.github.http-builder-ng:http-builder-ng-okhttp:$httpBuilderVersion") {
         exclude module: 'groovy-all'
     }
 
-    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+    testImplementation('org.spockframework:spock-core:1.1-groovy-2.4') {
         exclude module: 'groovy-all'
     }
-    testCompile('com.stehno.ersatz:ersatz:1.5.0') {
+    testImplementation('com.stehno.ersatz:ersatz:1.5.0') {
         exclude module: 'groovy-all'
         exclude group: 'ch.qos.logback'
     }
