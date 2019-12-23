@@ -1,13 +1,13 @@
 plugins {
     id 'com.github.hierynomus.license' version '0.15.0'
-    id 'com.github.kt3k.coveralls' version '2.8.1'
-    id 'com.gradle.plugin-publish' version '0.9.7'
+    id 'com.github.kt3k.coveralls' version '2.9.0'
+    id 'com.gradle.plugin-publish' version '0.10.1'
     id 'java-gradle-plugin'
     id 'groovy'
     id 'jacoco'
     id 'maven-publish'
-    id 'com.stehno.gradle.webpreview' version '0.2.0'
-    id 'org.asciidoctor.convert' version '1.5.3'
+    id 'com.stehno.gradle.webpreview' version '0.3.0'
+    id 'org.asciidoctor.convert' version '2.4.0'
     id 'com.stehno.gradle.site' version '0.0.3'
 }
 
