@@ -114,4 +114,8 @@ site {
     assetDir '**/fonts/**'
 }
 
+wrapper {
+    gradleVersion = "6.0.1"
+}
+
 tasks.site.dependsOn = ['build', 'jacocoTestReport', 'groovydoc', 'asciidoctor']
