@@ -1,7 +1,8 @@
 
 language: java
 install: true
-jdk: oraclejdk8
+jdk:
+    - openjdk8
 env:
   matrix:
   - TERM=dumb
@@ -10,3 +11,11 @@ before_script:
 script: ./gradlew build
 after_success:
   - ./gradlew jacocoTestReport coveralls
+before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+    directories:
+        - $HOME/.gradle/caches/
+        - $HOME/.gradle/wrapper/
