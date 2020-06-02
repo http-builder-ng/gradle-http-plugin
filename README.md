@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/http-builder-ng/gradle-http-plugin.svg?branch=master)](https://travis-ci.org/http-builder-ng/gradle-http-plugin) [![Coverage Status](https://coveralls.io/repos/github/http-builder-ng/gradle-http-plugin/badge.svg?branch=master)](https://coveralls.io/github/http-builder-ng/gradle-http-plugin?branch=master)
 
+> Dormant - The HttpBuilder-NG project is going dormant. Neither of us use the project any longer nor do we have the extra time to properly maintain it. Please feel free to fork it and move it forward, or contact us (with an issue) to discuss options for taking over the project.
+
 ## Quick Links
 
 * Site: https://http-builder-ng.github.io/gradle-http-plugin/
