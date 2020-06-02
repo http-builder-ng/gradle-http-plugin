@@ -1,13 +1,13 @@
 plugins {
-    id 'com.github.hierynomus.license' version '0.13.1'
-    id 'com.github.kt3k.coveralls' version '2.8.1'
-    id 'com.gradle.plugin-publish' version '0.9.7'
+    id 'com.github.hierynomus.license' version '0.15.0'
+    id 'com.github.kt3k.coveralls' version '2.9.0'
+    id 'com.gradle.plugin-publish' version '0.10.1'
     id 'java-gradle-plugin'
     id 'groovy'
     id 'jacoco'
     id 'maven-publish'
-    id 'com.stehno.gradle.webpreview' version '0.2.0'
-    id 'org.asciidoctor.convert' version '1.5.3'
+    id 'com.stehno.gradle.webpreview' version '0.3.0'
+    id 'org.asciidoctor.convert' version '2.4.0'
     id 'com.stehno.gradle.site' version '0.0.3'
 }
 
@@ -26,24 +26,24 @@ configurations {
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
 
     groovyDoc 'org.codehaus.groovy:groovy-groovydoc:2.4.12'
     groovyDoc 'org.codehaus.groovy:groovy-ant:2.4.12'
 
     // TODO: ideally the plugin would download the desired client only
-    compile("io.github.http-builder-ng:http-builder-ng-apache:$httpBuilderVersion") {
+    implementation("io.github.http-builder-ng:http-builder-ng-apache:$httpBuilderVersion") {
         exclude module: 'groovy-all'
     }
-    compile("io.github.http-builder-ng:http-builder-ng-okhttp:$httpBuilderVersion") {
+    implementation("io.github.http-builder-ng:http-builder-ng-okhttp:$httpBuilderVersion") {
         exclude module: 'groovy-all'
     }
 
-    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+    testImplementation('org.spockframework:spock-core:1.1-groovy-2.4') {
         exclude module: 'groovy-all'
     }
-    testCompile('com.stehno.ersatz:ersatz:1.5.0') {
+    testImplementation('com.stehno.ersatz:ersatz:1.5.0') {
         exclude module: 'groovy-all'
         exclude group: 'ch.qos.logback'
     }
@@ -112,6 +112,10 @@ task publishSite(type: GradleBuild, group: 'Publishing', description: 'Publishes
 site {
     versionedFile 'src/docs/asciidoc/index.adoc'
     assetDir '**/fonts/**'
+}
+
+wrapper {
+    gradleVersion = "6.0.1"
 }
 
 tasks.site.dependsOn = ['build', 'jacocoTestReport', 'groovydoc', 'asciidoctor']

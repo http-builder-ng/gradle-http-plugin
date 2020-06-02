@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 HttpBuilder-NG Project
+ * Copyright (C) 2019 HttpBuilder-NG Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ class HttpTask extends DefaultTask {
      *
      * @param closure the configuration closure
      */
-    @Input void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
+    void config(@DelegatesTo(HttpObjectConfig) final Closure closure) {
         config = closure
     }
 
@@ -60,103 +60,103 @@ class HttpTask extends DefaultTask {
      *
      * @param consumer the configuration consumer
      */
-    @Input void config(final Consumer<HttpObjectConfig> consumer) {
+    void config(final Consumer<HttpObjectConfig> consumer) {
         config = consumer
     }
 
-    @Input void get(@DelegatesTo(HttpConfig) final Closure conf) {
+    void get(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'get', conf
     }
 
-    @Input void getAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+    void getAsync(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'getAsync', conf
     }
 
-    @Input void get(final Consumer<HttpConfig> conf) {
+    void get(final Consumer<HttpConfig> conf) {
         addRequestConfig 'get', conf
     }
 
-    @Input void getAsync(final Consumer<HttpConfig> conf) {
+    void getAsync(final Consumer<HttpConfig> conf) {
         addRequestConfig 'getAsync', conf
     }
 
-    @Input void head(@DelegatesTo(HttpConfig) final Closure conf) {
+    void head(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'head', conf
     }
 
-    @Input void headAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+    void headAsync(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'headAsync', conf
     }
 
-    @Input void head(final Consumer<HttpConfig> conf) {
+    void head(final Consumer<HttpConfig> conf) {
         addRequestConfig 'head', conf
     }
 
-    @Input void headAsync(final Consumer<HttpConfig> conf) {
+    void headAsync(final Consumer<HttpConfig> conf) {
         addRequestConfig 'headAsync', conf
     }
 
-    @Input void put(@DelegatesTo(HttpConfig) final Closure conf) {
+    void put(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'put', conf
     }
 
-    @Input void putAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+    void putAsync(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'putAsync', conf
     }
 
-    @Input void put(final Consumer<HttpConfig> conf) {
+    void put(final Consumer<HttpConfig> conf) {
         addRequestConfig 'put', conf
     }
 
-    @Input void putAsync(final Consumer<HttpConfig> conf) {
+    void putAsync(final Consumer<HttpConfig> conf) {
         addRequestConfig 'putAsync', conf
     }
 
-    @Input void post(@DelegatesTo(HttpConfig) final Closure conf) {
+    void post(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'post', conf
     }
 
-    @Input void postAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+    void postAsync(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'postAsync', conf
     }
 
-    @Input void post(final Consumer<HttpConfig> conf) {
+    void post(final Consumer<HttpConfig> conf) {
         addRequestConfig 'post', conf
     }
 
-    @Input void postAsync(final Consumer<HttpConfig> conf) {
+    void postAsync(final Consumer<HttpConfig> conf) {
         addRequestConfig 'postAsync', conf
     }
 
-    @Input void delete(@DelegatesTo(HttpConfig) final Closure conf) {
+    void delete(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'delete', conf
     }
 
-    @Input void deleteAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+    void deleteAsync(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'deleteAsync', conf
     }
 
-    @Input void delete(final Consumer<HttpConfig> conf) {
+    void delete(final Consumer<HttpConfig> conf) {
         addRequestConfig 'delete', conf
     }
 
-    @Input void deleteAsync(final Consumer<HttpConfig> conf) {
+    void deleteAsync(final Consumer<HttpConfig> conf) {
         addRequestConfig 'deleteAsync', conf
     }
 
-    @Input void patch(@DelegatesTo(HttpConfig) final Closure conf) {
+    void patch(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'patch', conf
     }
 
-    @Input void patchAsync(@DelegatesTo(HttpConfig) final Closure conf) {
+    void patchAsync(@DelegatesTo(HttpConfig) final Closure conf) {
         addRequestConfig 'patchAsync', conf
     }
 
-    @Input void patch(final Consumer<HttpConfig> conf) {
+    void patch(final Consumer<HttpConfig> conf) {
         addRequestConfig 'patch', conf
     }
 
-    @Input void patchAsync(final Consumer<HttpConfig> conf) {
+    void patchAsync(final Consumer<HttpConfig> conf) {
         addRequestConfig 'patchAsync', conf
     }
 
